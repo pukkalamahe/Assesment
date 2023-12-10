@@ -82,6 +82,13 @@ def find_ids_within_ten_percentage_threshold(df, reference_id)->pd.DataFrame():
                           of the reference ID's average distance.
     """
     # Write your logic here
+    reference_df = df[df['id_start'] == reference_value]
+    average_distance = reference_df['distance'].mean()
+    threshold = 0.1 * average_distance
+    close_ids = df[(df['id_start'] != reference_value) &
+                   (df['distance'] >= (average_distance - threshold)) &
+                   (df['distance'] <= (average_distance + threshold))]
+    df = sorted(close_ids['id_start'].unique())
 
     return df
 
