@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+import itertools
 
 
 def calculate_distance_matrix(df)->pd.DataFrame():
@@ -54,6 +56,15 @@ def unroll_distance_matrix(df)->pd.DataFrame():
         pandas.DataFrame: Unrolled DataFrame containing columns 'id_start', 'id_end', and 'distance'.
     """
     # Write your logic here
+    upper_triangle = distance_matrix.where(np.triu(np.ones(distance_matrix.shape), k=1).astype(bool))
+    
+    data = []
+    for index, row in upper_triangle.iterrows():
+        for column, value in row.iteritems():
+            if not pd.isnull(value):
+                data.append((index, column, value))
+    
+    df = pd.DataFrame(data, columns=['id_start', 'id_end', 'distance'])
 
     return df
 
