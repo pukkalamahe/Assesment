@@ -91,7 +91,8 @@ def multiply_matrix(matrix)->pd.DataFrame:
         pandas.DataFrame: Modified matrix with values multiplied based on custom conditions.
     """
     # Write your logic here
-
+    matrix = df.apptlymap(lambda x: x * 0.75 if x > 20 else x * 1.25)
+    matrix = matrix.round(1)
     return matrix
 
 
