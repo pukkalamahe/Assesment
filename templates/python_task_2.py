@@ -12,7 +12,34 @@ def calculate_distance_matrix(df)->pd.DataFrame():
         pandas.DataFrame: Distance matrix
     """
     # Write your logic here
+    df = pd.read_csv('/content/dataset-3.csv')
+    distances = {}
+    
+    for index, row in df.iterrows():
+        from_location, to_location, distance = row['id_start'], row['id_end'], row['distance']
+        if from_location not in distances:
+            distances[from_location] = {}
+        if to_location not in distances:
+            distances[to_location] = {}
+        distances[from_location][to_location] = distance
+        distances[to_location][from_location] = distance 
 
+    locations = sorted(distances.keys())
+    df = pd.DataFrame(0, index=locations, columns=locations)
+    for i in locations:
+        for j in locations:
+            if i != j:
+                if j in distances[i]:
+                    df.at[i, j] = distances[i][j]
+                else:
+                    intermediates = [k for k in locations if k != i and k != j and k in distances[i] and k in distances[j]]
+                    min_distance = float('inf')
+                    for intermediate in intermediates:
+                        distance = distances[i][intermediate] + distances[intermediate][j]
+                        if distance < min_distance:
+                            min_distance = distance
+                    if min_distance != float('inf'):
+                        df.at[i, j] = min_distance
     return df
 
 
