@@ -57,8 +57,10 @@ def get_bus_indexes(df)->list:
         list: List of indexes where 'bus' values exceed twice the mean.
     """
     # Write your logic here
-
-    return list()
+    mean_value = df['bus'].mean()
+    result = df[df['bus'] > 2 * mean_value].index
+    
+    return list(result)
 
 
 def filter_routes(df)->list:
@@ -104,3 +106,12 @@ def time_check(df)->pd.Series:
     # Write your logic here
 
     return pd.Series()
+
+df = pd.read_csv("datasets/dataset-1.csv")
+print(generate_car_matrix(df))
+print(get_type_count(df))
+print(get_bus_indexes(df))
+print(filter_routes(df))
+print(multiply_matrix(matrix))
+print(time_check(df))
+
