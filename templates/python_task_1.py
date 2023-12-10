@@ -15,17 +15,14 @@ def generate_car_matrix(df)->pd.DataFrame:
     # Write your logic here
     # Input the data from dataset from csv file
     df = pd.read_csv('/content/dataset-1.csv')
-
+    
     # Set columns, index and values from id_1, id_2 and car values from dataframe
-    Result_table = df.pivot(index='id_1', columns='id_2', values='car')
+    df = df.pivot(index='id_1', columns='id_2', values='car')
 
     # Manipulate the diagonal values as 0
-    Result_table = Result_table.fillna(0)
-
-    for i in range(min(Result_table.shape)):
-        Result_table.iloc[i, i] = 0
-
-    return Result_table
+    df = df.fillna(0)
+    for i in range(min(df.shape)):
+        df.iloc[i, i] = 0
     return df
 
 
@@ -41,7 +38,12 @@ def get_type_count(df)->dict:
     """
     # Write your logic here
 
-    return dict()
+    df['car_type'] = pd.cut(df['car'], bins=[float('-inf'), 15, 25, float('inf')],
+                              labels=['low', 'medium', 'high'])
+    count = df['car_type'].value_counts().to_dict()
+    return dict(sorted(count.items()))
+    
+    
 
 
 def get_bus_indexes(df)->list:
