@@ -107,8 +107,18 @@ def time_check(df)->pd.Series:
         pd.Series: return a boolean series
     """
     # Write your logic here
+    data['start_time'] = pd.to_datetime(data['startDay'] + ' ' + data['startTime'])
+    
+   
+      data['end_time'] = pd.to_datetime(data['endDay'] + ' ' + data['endTime'])
+      data['interval_duration'] = data['end_time'] - data['start_time']
+      covers_24_hours = data['interval_duration'] == pd.Timedelta(days=1)
+      covers_7_days = (data['start_time'].dt.dayofweek.min() == 0) & (data['end_time'].dt.dayofweek.max() == 6)
+      data = ~(covers_24_hours & covers_7_days)
+      series = completeness.groupby([data['id'], data['id_2']]).any()
 
-    return pd.Series()
+      return series
+
 
 df = pd.read_csv("datasets/dataset-1.csv")
 print(generate_car_matrix(df))
