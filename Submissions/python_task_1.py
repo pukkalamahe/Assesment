@@ -107,15 +107,15 @@ def time_check(df)->pd.Series:
         pd.Series: return a boolean series
     """
     # Write your logic here
-    data['start_time'] = pd.to_datetime(data['startDay'] + ' ' + data['startTime'])
+    df['start_time'] = pd.to_datetime(df['startDay'] + ' ' + df['startTime'])
     
    
-      data['end_time'] = pd.to_datetime(data['endDay'] + ' ' + data['endTime'])
-      data['interval_duration'] = data['end_time'] - data['start_time']
-      covers_24_hours = data['interval_duration'] == pd.Timedelta(days=1)
-      covers_7_days = (data['start_time'].dt.dayofweek.min() == 0) & (data['end_time'].dt.dayofweek.max() == 6)
-      data = ~(covers_24_hours & covers_7_days)
-      series = completeness.groupby([data['id'], data['id_2']]).any()
+      df['end_time'] = pd.to_datetime(df['endDay'] + ' ' + df['endTime'])
+      df['interval_duration'] = df['end_time'] - df['start_time']
+      covers_24_hours = df['interval_duration'] == pd.Timedelta(days=1)
+      covers_7_days = (df['start_time'].dt.dayofweek.min() == 0) & (df['end_time'].dt.dayofweek.max() == 6)
+      df = ~(covers_24_hours & covers_7_days)
+      series = completeness.groupby([df['id'], data['id_2']]).any()
 
       return series
 
